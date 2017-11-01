@@ -23,25 +23,15 @@ class AuthRoleMiddleware {
      * @return mixed
      */
     public function handle($request, Closure $next) {
-        $user = JWTAuth::parseToken()->toUser();
-        $id =$user->id;
         
-
-        //@TODO zavrsiti logiku
-        $user = User::find($id); //treba ic $id, vo je hardkodirano, prepraviti sve treba
-        $role = $user->roles()->first();
-
-       
-
+            $user = JWTAuth::parseToken()->toUser();
+            $role = $user->roles()->first();
             $roles = $role->role_name;
-      
-       
-        if ($roles == 'admin') {
-            return $next($request);
-        } else {
 
-            return response()->json(['message' => 'Only admins can acces']);
+            if ($roles == 'admin') {
+                
+                return $next($request);
+                
+            } else { return response()->json(['message' => 'Only admins can acces']);}
         }
-    }
-
 }

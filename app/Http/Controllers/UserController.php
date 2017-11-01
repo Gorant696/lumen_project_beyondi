@@ -26,10 +26,12 @@ class UserController extends Controller {
                 'password' => 'required'
             ]);
         
-            //probat optimizirati ovaj kod, pokledat u eloquent dokumentaciji
-        try {
             $user = User::where('email', $request->input('email'))->first();
-
+            
+            if ($user == null)
+                
+            { return response()->json(['error' => 'Wrong email or password!'], 401); }
+            
             if (Hash::check($request->password, $user->password)) {
 
                 $role = $user->roles()->first();
@@ -37,25 +39,16 @@ class UserController extends Controller {
                 
                 $permission_array = [];
                 
-                $role_permission = Roles::with('permissions')->where('role_name', $rolename)->get();
-                foreach ($role_permission as $permission)
-                {
-                    foreach ($permission->permissions as $per)
-                    {array_push($permission_array, $per->permission_name);}
-                }
-                
+                $role_permission = Roles::with('permissions')->where('role_name', $rolename)->first();
+
+                foreach ($role_permission->permissions as $permission)
+                {array_push($permission_array, $permission->permission_name);}
+
                 $roles_and_permissions = [$rolename=>$permission_array];
                 
                 $token = JWTAuth::fromUser($user, $roles_and_permissions);
-            } else {
-                return response()->json(['error' => 'Wrong email or password!'], 401);
-            }
-        } //endtry
-                catch (JWTException $e) {
-
-                return response()->json(['error' => 'Could not proceed!'], 500);
-        }
-
+            } else { return response()->json(['error' => 'Wrong email or password!'], 401); }
+                
             // vraća token ako je sve u redu
             return response()->json(compact('token'));
     }
@@ -70,13 +63,10 @@ class UserController extends Controller {
     
     public function findone($id) {
 
-        
                 $user=User::find($id);
             
-                if ($user == null){
-
-                return response()->json(['Message' =>'User with this id does not exist']);
-                }
+                if ($user == null)
+                { return response()->json(['Message' =>'User with this id does not exist']);}
             
                 return response()->json(['user' => $user]);
         }

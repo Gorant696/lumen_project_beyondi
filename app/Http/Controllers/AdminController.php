@@ -63,7 +63,7 @@ class AdminController extends Controller {
             
         } catch (\Exception $e) {
 
-            return response()->json(['message' => $e->getMessage()]);
+            return response()->json(['message' => 'User with this ID does not exist!']);
         }
     }
     
@@ -72,6 +72,10 @@ class AdminController extends Controller {
         
         try {
             $user = User::find($id);
+            
+            if ($user == null)
+            {return response()->json(['Message'=> 'User with this ID does not exist!']);}
+                  
             $user->update($request->all());
 
             return response()->json(['message' => 'Updated successfully!']);
@@ -86,6 +90,10 @@ class AdminController extends Controller {
         
         try{
             $user= User::find($id);
+            
+            if($user == null)
+            {return response()->json(['Message'=> 'User with this ID does not exist!']);}
+            
             $role =$user->roles()->first();
             $rolename = $role->role_name;
             

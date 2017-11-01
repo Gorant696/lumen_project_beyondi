@@ -66,9 +66,9 @@ $app->singleton(
 |
 */
 
- $app->middleware([
+// $app->middleware([
   // 'authrole' => 'App\Http\Middleware\AuthRoleMiddleware'
- ]);
+// ]);
 
  $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
