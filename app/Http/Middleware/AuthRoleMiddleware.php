@@ -15,13 +15,7 @@ use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 
 class AuthRoleMiddleware {
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
+
     public function handle($request, Closure $next) {
         
             $user = JWTAuth::parseToken()->toUser();

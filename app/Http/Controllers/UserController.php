@@ -34,8 +34,7 @@ class UserController extends Controller {
         
             $user = User::where('email', $request->input('email'))->first();
             
-            if ($user == null)
-                
+            if ($user == null)              
             { return response()->json(['error' => 'Wrong email or password!'], 401); }
             
             if (Hash::check($request->password, $user->password)) {
@@ -55,9 +54,7 @@ class UserController extends Controller {
                 $token = JWTAuth::fromUser($user, $roles_and_permissions);
             } else { return response()->json(['error' => 'Wrong email or password!'], 401); }
                 
-            // vraća token ako je sve u redu
-            return response()->json(compact('token'));
-    }
+            return response()->json(compact('token'));}
 
     public function findall() {
 
