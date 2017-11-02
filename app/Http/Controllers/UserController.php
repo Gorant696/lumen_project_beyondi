@@ -15,14 +15,12 @@ use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 
 class UserController extends Controller {
 
-    public function __construct() {
-        
-    }
+  
     
     
     public function index() {
         
-        return response()->json(['Wellcome message'=> "Hello! This API is created in laravel/lumen framework!"]);
+            return response()->json(['Wellcome message'=> "Hello! This API is created in laravel/lumen framework!"]);
         
     }
 
@@ -54,6 +52,7 @@ class UserController extends Controller {
                 $roles_and_permissions = [$rolename=>$permission_array];
                 
                 $token = JWTAuth::fromUser($user, $roles_and_permissions);
+                
             } else { return response()->json(['error' => 'Wrong email or password!'], 401); }
                 
             return response()->json(compact('token'));}

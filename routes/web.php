@@ -21,6 +21,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->put('/edituser/{id}', 'AdminController@update');
     
     $router->put('/changestatus/{id}', 'AdminController@changestatus');
+    
+    $router->get('/logout', 'AuthUserController@logoutuser');
 });
 
     $router->get('/', 'UserController@index');
@@ -30,4 +32,5 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/users', 'UserController@findall');
 
     $router->get('/user/{id}', 'UserController@findone');
-
+    
+    

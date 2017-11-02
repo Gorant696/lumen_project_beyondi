@@ -16,29 +16,37 @@ use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 class AuthUserController extends Controller {
 
 
-    public function __construct() {
 
-    }
 
- public function findme() {
+        public function findme() {
         
-        try {
+            try {
 
-            if (!$user = JWTAuth::parseToken()->toUser()) {
+                if (!$user = JWTAuth::parseToken()->toUser()) {
 
-                return response()->json(['user_not_found'], 404);}
-            } catch (ExpiredExc $e) {
+                    return response()->json(['user_not_found'], 404);}
+                } catch (ExpiredExc $e) {
 
-                return response()->json(['token_expired'], $e->getStatusCode());
-            } catch (InvalidExc $e) {
+                    return response()->json(['token_expired'], $e->getStatusCode());
+                } catch (InvalidExc $e) {
 
-                return response()->json(['token_invalid'], $e->getStatusCode());
-            } catch (JWTExc$e) {
+                    return response()->json(['token_invalid'], $e->getStatusCode());
+                } catch (JWTExc$e) {
 
-                return response()->json(['token_absent'], $e->getStatusCode());
-            }
+                    return response()->json(['token_absent'], $e->getStatusCode());
+                }
 
-                return response()->json(['You are signed as' => $user]);
+                    return response()->json(['You are signed as' => $user]);
+        }
+        
+        
+        public function logoutuser(){
+            
+           if ($token = JWTAuth::gettoken())
+        
+           { JWTAuth::invalidate($token);
+   
+            return response()->json(['Message'=>'You have successfully signed out!']);}
+        
     }
-
 }
