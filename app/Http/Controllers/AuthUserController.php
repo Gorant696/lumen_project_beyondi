@@ -17,7 +17,6 @@ class AuthUserController extends Controller {
 
 
 
-
         public function findme() {
         
             try {
@@ -42,11 +41,11 @@ class AuthUserController extends Controller {
         
         public function logoutuser(){
             
-           if ($token = JWTAuth::gettoken())
-        
-           { JWTAuth::invalidate($token);
-   
-            return response()->json(['Message'=>'You have successfully signed out!']);}
+                if ($token = JWTAuth::gettoken())
+
+                { JWTAuth::invalidate($token);
+
+                 return response()->json(['Message'=>'You have successfully signed out!']);}
         
     }
 }
