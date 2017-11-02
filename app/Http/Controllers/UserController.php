@@ -19,12 +19,14 @@ class UserController extends Controller {
         
     }
     
+    
     public function index() {
         
         return response()->json(['Wellcome message'=> "Hello! This API is created in laravel/lumen framework!"]);
         
     }
 
+    
     public function authenticate(Request $request) {
 
             $this->validate($request, [
@@ -55,6 +57,7 @@ class UserController extends Controller {
             } else { return response()->json(['error' => 'Wrong email or password!'], 401); }
                 
             return response()->json(compact('token'));}
+            
 
     public function findall() {
 
