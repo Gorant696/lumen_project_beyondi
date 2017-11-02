@@ -18,6 +18,12 @@ class UserController extends Controller {
     public function __construct() {
         
     }
+    
+    public function index() {
+        
+        return response()->json(['Wellcome message'=> "Hello! This API is created in laravel/lumen framework!"]);
+        
+    }
 
     public function authenticate(Request $request) {
 

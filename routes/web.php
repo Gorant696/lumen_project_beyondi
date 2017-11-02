@@ -10,24 +10,24 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    
+    $router->get('/findme', 'AuthUserController@findme');
+    
+    $router->post('/createuser', 'AdminController@create');
+    
+    $router->delete('/deleteuser/{id}', 'AdminController@delete');
+    
+    $router->put('/edituser/{id}', 'AdminController@update');
+    
+    $router->put('/changestatus/{id}', 'AdminController@changestatus');
+});
 
+    $router->get('/', 'UserController@index');
 
-//Moram grupirati rute zbog middleware i eventualno prefixa.
+    $router->post('/login', 'UserController@authenticate');
 
+    $router->get('/users', 'UserController@findall');
 
+    $router->get('/user/{id}', 'UserController@findone');
 
-$router->post('/login', 'UserController@authenticate');
-
-$router->get('/users', 'UserController@findall');
-
-$router->get('/user/{id}', 'UserController@findone');
-
-$router->get('/findme', ['middleware'=>'auth', 'uses' => 'AuthUserController@findme']);
-
-$router->post('/createuser', ['middleware'=>'auth', 'uses' => 'AdminController@create']);
-
-$router->delete('/deleteuser/{id}', ['middleware'=>'auth', 'uses' => 'AdminController@delete']);
-
-$router->put('/edituser/{id}', ['middleware'=>'auth', 'uses' => 'AdminController@update']);
-
-$router->put('/changestatus/{id}', ['middleware'=>'auth', 'uses' => 'AdminController@changestatus']);
