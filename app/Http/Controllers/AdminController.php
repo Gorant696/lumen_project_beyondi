@@ -15,6 +15,7 @@ use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 
 class AdminController extends Controller {
 
+    
     public function __construct() {
         
         $this->middleware('authrole');
@@ -23,14 +24,14 @@ class AdminController extends Controller {
 
     public function create(Request $request, User $user) {
     
-            try {
-
+          
             $this->validate($request, [
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
                 'password' => 'required'
             ]);
-
+            
+            try {
             $pass = $request->input('password');
 
             $user->name = $request->input('name');
