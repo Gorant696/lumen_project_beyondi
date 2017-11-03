@@ -34,8 +34,12 @@ class AuthUserController extends Controller {
 
                     return response()->json(['token_absent'], $e->getStatusCode());
                 }
-
-                    return response()->json(['You are signed as' => $user]);
+                
+                $payload = JWTAuth::gettoken();
+                $token = JWTAuth::decode($payload);
+                $roles_permissions = json_decode($token);
+                
+                return response()->json(['You are signed as' => $user, 'Roles and Permissions'=>$roles_permissions]);
         }
         
         
@@ -48,4 +52,5 @@ class AuthUserController extends Controller {
                  return response()->json(['Message'=>'You have successfully signed out!']);}
         
     }
+    
 }
