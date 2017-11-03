@@ -18,14 +18,28 @@ class AuthRoleMiddleware {
 
     public function handle($request, Closure $next) {
         
-            $user = JWTAuth::parseToken()->toUser();
-            $role = $user->roles()->first();
-            $roles = $role->role_name;
-
-            if ($roles == 'admin') {
+                $payload = JWTAuth::gettoken();
+                $token = JWTAuth::decode($payload);
+                $roles_permissions = json_decode($token);
                 
-                return $next($request);
-                
-            } else { return response()->json(['message' => 'Only admins can acces']);}
+                foreach ($roles_permissions as $key => $role){
+                    
+                    switch ($key){
+                        
+                        case 'admin':
+                        return $next($request);break;
+                    
+                        case 'employee':
+                            
+                        return response()->json(['Message' => 'Only administrators can change status of user!']);break;
+                        
+                        
+                    }
+                    
+                }
+        
         }
+        
+        
+        
 }

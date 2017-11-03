@@ -46,7 +46,7 @@ class AdminController extends Controller {
             
             } catch (\Exception $e) {
 
-            return response()->json(['message' => $e->getMessage()]);
+            return response()->json(['message' => 'You need to provide name, email and password!']);
         }
     }
     
