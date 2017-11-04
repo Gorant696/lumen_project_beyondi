@@ -16,67 +16,164 @@ use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 class UserController extends Controller {
 
   
+            public function __construct() {
+
+                $this->middleware('authrole');
+
+         }
     
+
+            public function create(Request $request, User $user) {
     
-    public function index() {
-        
-            return response()->json(['Wellcome message'=> "Hello! This API is created in laravel/lumen framework!"]);
-        
+          
+                $this->validate($request, [
+                    'name' => 'required',
+                    'email' => 'required|email|unique:users',
+                    'password' => 'required'
+                ]);
+            
+            try {
+                $pass = $request->input('password');
+
+                $user->name = $request->input('name');
+                $user->email = $request->input('email');
+                $user->password = app('hash')->make($pass);
+                $user->save();
+
+                $roles=Roles::where('role_name', 'employee')->first();
+                $id = $roles->id;
+                $user->roles()->attach($id); 
+
+                return response()->json(['message' => "Wellcome $user->name!"]);
+            
+            } catch (\Exception $e) {
+
+            return response()->json(['message' => 'You need to provide name, email and password!']);
+        }
     }
+    
+    
+            public function delete($id) {
+
+                try {
+                    $user = User::find($id);
+                    $name = $user->name;
+
+                    User::destroy($id);
+
+                    return response()->json(['message' => "$name is deleted"]);
+
+                } catch (\Exception $e) {
+
+                    return response()->json(['message' => 'User with this ID does not exist!']);
+                }
+            }
+    
+    
+            public function update($id, Request $request) {
+
+                try {
+                    $user = User::find($id);
+
+                    if ($user == null)
+                    {return response()->json(['message'=> 'User with this ID does not exist!']);}
+
+                    $user->update($request->all());
+
+                    return response()->json(['message' => 'Updated successfully!']);
+
+                } catch (\Exception $e) {
+
+                    return response()->json(['message' => $e->getMessage()]);
+                }
+            }
+    
+            public function changestatus($id, Request $request) {
+
+                try{
+                    $user= User::find($id);
+
+                    if (!$user) {
+                        return response()->json(['Message'=> 'User with this ID does not exist!']);
+                    }
+
+                    $role =$user->roles()->first();
+                    $rolename = $role->role_name;
+
+                    $user_role=Roles::where('role_name', $rolename)->first();
+                    $id=$user_role->id;
+
+                    $user_not_role=Roles::whereNotin('role_name', [$rolename])->first();
+                    $not_id=$user_not_role->id;
+
+                    $user->roles()->detach($id);
+                    $user->roles()->attach($not_id);
+
+                } catch (\Exception $e) {
+
+                    return response()->json(['message' => $e->getMessage()]);
+                }
+
+                    return response()->json(['Message'=>"User is not anymore $rolename"]);
+            }
+            
+
+            public function findall(Request $request) {
+
+
+                        $users = User::all();
+
+                        return response()->json(['users' => $users]);
+            }
 
     
-    public function authenticate(Request $request) {
+            public function findone($id) {
 
-            $this->validate($request, [
-                'email' => 'required',
-                'password' => 'required'
-            ]);
+                        $user=User::find($id);
+
+                        if ($user == null)
+                        { return response()->json(['Message' =>'User with this id does not exist']);}
+
+                        return response()->json(['user' => $user]);
+                }
         
-            $user = User::where('email', $request->input('email'))->first();
-            
-            if ($user == null)              
-            { return response()->json(['error' => 'Wrong email or password!'], 401); }
-            
-            if (Hash::check($request->password, $user->password)) {
+            public function findme() {
 
-                $role = $user->roles()->first();
-                $rolename= $role->role_name;
-                
-                $permission_array = [];
-                
-                $role_permission = Roles::with('permissions')->where('role_name', $rolename)->first();
+               try {
 
-                foreach ($role_permission->permissions as $permission)
-                {array_push($permission_array, $permission->permission_name);}
+                   if (!$user = JWTAuth::parseToken()->toUser()) {
 
-                $roles_and_permissions = [$rolename=>$permission_array];
-                
-                $token = JWTAuth::fromUser($user, $roles_and_permissions);
-                
-            } else { return response()->json(['error' => 'Wrong email or password!'], 401); }
-                
-            return response()->json(compact('token'));}
-            
+                       return response()->json(['user_not_found'], 404);}
+                   } catch (ExpiredExc $e) {
 
-    public function findall() {
+                       return response()->json(['token_expired'], $e->getStatusCode());
+                   } catch (InvalidExc $e) {
 
-                $users = User::all();
+                       return response()->json(['token_invalid'], $e->getStatusCode());
+                   } catch (JWTExc$e) {
 
-                return response()->json(['users' => $users]);
-    }
+                       return response()->json(['token_absent'], $e->getStatusCode());
+                   }
 
-    
-    public function findone($id) {
+                   $token = JWTAuth::gettoken();
+                   
+                   $payload = JWTAuth::decode($token);
+                   
+                   $roles_permissions = json_decode($payload);
 
-                $user=User::find($id);
-            
-                if ($user == null)
-                { return response()->json(['Message' =>'User with this id does not exist']);}
-            
-                return response()->json(['user' => $user]);
+                   return response()->json(['You are signed as' => $user, 'Roles and Permissions'=>$roles_permissions]);
+           }
+        
+        
+            public function logoutuser(){
+
+                    if ($token = JWTAuth::gettoken())
+
+                    { JWTAuth::invalidate($token);
+
+                     return response()->json(['Message'=>'You have successfully signed out!']);}
+
         }
         
-        
     
-
 }

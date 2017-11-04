@@ -18,28 +18,59 @@ class AuthRoleMiddleware {
 
     public function handle($request, Closure $next) {
         
-                $payload = JWTAuth::gettoken();
-                $token = JWTAuth::decode($payload);
-                $roles_permissions = json_decode($token);
-                
-                foreach ($roles_permissions as $key => $role){
+        
+             $data = $request->route();
+             
                     
-                    switch ($key){
-                        
-                        case 'admin':
-                        return $next($request);break;
-                    
-                        case 'employee':
+                 foreach ($data as $key =>$datas) {
+                     
+                     
+                     //pitat jel bolje key==1 ili funkcija koja traži određeni dio stringa(Controller) u $datasu
+                         
+                         if ($key == 1) {
+                             
+                            $string = explode("@", $datas['uses']);
                             
-                        return response()->json(['Message' => 'Only administrators can change status of user!']);break;
+                           $method=$string[1];
+                             
+                         }
+                    
+                     }
+                                        
+             $token = JWTAuth::gettoken();
+             
+             $payload = JWTAuth::decode($token);
+             
+             $roles_permissions = json_decode($payload);
+                
+             foreach ($roles_permissions as $key => $role){
+                    
+                  switch ($key){
                         
-                        
+                     case 'admin':
+                            
+                    return $next($request); break;
+                    
+                    
+                     case 'employee':
+                         
+                     case 'editor':    
+                            
+                         foreach ($role as $role_permit) {
+                         
+                         if( $role_permit == $method){
+                             
+                             return $next($request);
+                             
+                            }
+                         
+                        } break;
+                         
                     }
                     
                 }
-        
+                
+            return response()->json(['Message' => 'You are not allowed to access this method!']);
         }
-        
-        
         
 }

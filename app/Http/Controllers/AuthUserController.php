@@ -16,41 +16,42 @@ use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 class AuthUserController extends Controller {
 
 
-
-        public function findme() {
+public function index() {
         
-            try {
-
-                if (!$user = JWTAuth::parseToken()->toUser()) {
-
-                    return response()->json(['user_not_found'], 404);}
-                } catch (ExpiredExc $e) {
-
-                    return response()->json(['token_expired'], $e->getStatusCode());
-                } catch (InvalidExc $e) {
-
-                    return response()->json(['token_invalid'], $e->getStatusCode());
-                } catch (JWTExc$e) {
-
-                    return response()->json(['token_absent'], $e->getStatusCode());
-                }
-                
-                $payload = JWTAuth::gettoken();
-                $token = JWTAuth::decode($payload);
-                $roles_permissions = json_decode($token);
-                
-                return response()->json(['You are signed as' => $user, 'Roles and Permissions'=>$roles_permissions]);
-        }
-        
-        
-        public function logoutuser(){
-            
-                if ($token = JWTAuth::gettoken())
-
-                { JWTAuth::invalidate($token);
-
-                 return response()->json(['Message'=>'You have successfully signed out!']);}
+            return response()->json(['Wellcome message'=> "Hello! This API is created in laravel/lumen framework!"]);
         
     }
+       
+     public function authenticate(Request $request) {
+
+            $this->validate($request, [
+                'email' => 'required',
+                'password' => 'required'
+            ]);
+        
+            $user = User::where('email', $request->input('email'))->first();
+            
+            if ($user == null)              
+            { return response()->json(['error' => 'Wrong email or password!'], 401); }
+            
+            if (Hash::check($request->password, $user->password)) {
+
+                $role = $user->roles()->first();
+                $rolename= $role->role_name;
+                
+                $permission_array = [];
+                
+                $role_permission = Roles::with('permissions')->where('role_name', $rolename)->first();
+
+                foreach ($role_permission->permissions as $permission)
+                {array_push($permission_array, $permission->permission_name);}
+
+                $roles_and_permissions = [$rolename=>$permission_array];
+                
+                $token = JWTAuth::fromUser($user, $roles_and_permissions);
+                
+            } else { return response()->json(['error' => 'Wrong email or password!'], 401); }
+                
+            return response()->json(compact('token'));}
     
 }

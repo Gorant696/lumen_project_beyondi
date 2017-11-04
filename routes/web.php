@@ -12,27 +12,29 @@
 */
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
-    $router->get('/findme', 'AuthUserController@findme');
+    $router->get('/findme', 'UserController@findme');
     
-    $router->post('/createuser', 'AdminController@create');
+    $router->post('/users', 'UserController@create');
     
-    $router->delete('/deleteuser/{id}', 'AdminController@delete');
+    $router->delete('/users/{id}', 'UserController@delete');
     
-    $router->put('/edituser/{id}', 'AdminController@update');
+    $router->put('/users/{id}', 'UserController@update');
     
-    $router->put('/changestatus/{id}', 'AdminController@changestatus');
+     $router->get('/users', 'UserController@findall');
+
+    $router->get('/users/{id}', 'UserController@findone');
     
-    $router->get('/logout', 'AuthUserController@logoutuser');
+    $router->put('/changestatus/{id}', 'UserController@changestatus');
+    
+    $router->get('/logout', 'UserController@logoutuser');
     
 });
 
-    $router->get('/', 'UserController@index');
+    $router->get('/', 'AuthUserController@index');
 
-    $router->post('/login', 'UserController@authenticate');
+    $router->post('/login', 'AuthUserController@authenticate');
 
-    $router->get('/users', 'UserController@findall');
-
-    $router->get('/user/{id}', 'UserController@findone');
+   
     
    
     
