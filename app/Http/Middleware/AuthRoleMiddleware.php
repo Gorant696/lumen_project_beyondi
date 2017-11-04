@@ -21,9 +21,7 @@ class AuthRoleMiddleware {
         
              $data = $request->route();
              
-                    
                  foreach ($data as $key =>$datas) {
-                     
                      
                      //pitat jel bolje key==1 ili funkcija koja traži određeni dio stringa(Controller) u $datasu
                          
@@ -34,7 +32,6 @@ class AuthRoleMiddleware {
                            $method=$string[1];
                              
                          }
-                    
                      }
                                         
              $token = JWTAuth::gettoken();
@@ -42,35 +39,40 @@ class AuthRoleMiddleware {
              $payload = JWTAuth::decode($token);
              
              $roles_permissions = json_decode($payload);
-                
-             foreach ($roles_permissions as $key => $role){
-                    
-                  switch ($key){
+             
+        try{
+             
+             foreach ($roles_permissions as $object){
+
+                foreach ($object as $key => $role){
+
+                     switch ($key){
                         
-                     case 'admin':
-                            
-                    return $next($request); break;
+                         case 'admin':
+                           
+                         return $next($request); break;
                     
                     
-                     case 'employee':
-                         
-                     case 'editor':    
+                         case 'employee': case 'editor':    
                             
-                         foreach ($role as $role_permit) {
+                            foreach ($role as $role_permit) {
                          
-                         if( $role_permit == $method){
+                                if( $role_permit == $method){
                              
-                             return $next($request);
+                                return $next($request);
                              
                             }
                          
-                        } break;
-                         
+                            } break; 
                     }
-                    
                 }
-                
-            return response()->json(['Message' => 'You are not allowed to access this method!']);
+             }
+               } catch(\Exception $e){
+                   
+                   return response()->json(['Message' => 'You are not allowed to access this method!']); 
+                   
+               }
+
         }
-        
+  
 }

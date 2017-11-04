@@ -36,19 +36,37 @@ public function index() {
             
             if (Hash::check($request->password, $user->password)) {
 
-                $role = $user->roles()->first();
-                $rolename= $role->role_name;
+                $role = $user->roles()->get();
                 
-                $permission_array = [];
+               $permission_array = [];
+             
+               $customclaimsarray=[];
+              
                 
-                $role_permission = Roles::with('permissions')->where('role_name', $rolename)->first();
+                foreach ($role as $rolename){
+                    
+                                      
+                     $role_permission = Roles::with('permissions')->where('role_name', $rolename->role_name)->get();
 
-                foreach ($role_permission->permissions as $permission)
-                {array_push($permission_array, $permission->permission_name);}
+                     foreach ($role_permission as $permission_name){
+                         
+                         foreach($permission_name->permissions as $permission){
+                         
+                            array_push($permission_array, $permission->permission_name);
+                         
+                         }
+                     
+                   
+                        array_push($customclaimsarray, [$rolename->role_name=>$permission_array]);
+                        $permission_array = [];
+                     
 
-                $roles_and_permissions = [$rolename=>$permission_array];
+                    }
+                }
                 
-                $token = JWTAuth::fromUser($user, $roles_and_permissions);
+              
+                             
+               $token = JWTAuth::fromUser($user, $customclaimsarray);
                 
             } else { return response()->json(['error' => 'Wrong email or password!'], 401); }
                 
