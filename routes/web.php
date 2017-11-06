@@ -12,21 +12,45 @@
 */
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
-    $router->get('/findme', 'UserController@findme');
+    $router->get('/findme', [
+        'roles' => ['admin', 'employee', 'moderator'],
+        'uses' => 'UserController@findme'
+    ]);
     
-    $router->post('/users', 'UserController@create');
+    $router->post('/users', [
+        'roles' => ['admin', 'moderator'],
+        'uses' => 'UserController@create'
+    ]);
     
-    $router->delete('/users/{id}', 'UserController@delete');
+    $router->delete('/users/{id}', [
+        'roles' => ['admin'],
+        'uses' => 'UserController@delete'
+    ]);
     
-    $router->put('/users/{id}', 'UserController@update');
+    $router->put('/users/{id}', [
+        'roles' => ['admin', 'moderator'],
+        'uses' => 'UserController@update'
+    ]);
     
-     $router->get('/users', 'UserController@findall');
+     $router->get('/users', [
+        'roles' => ['admin', 'employee', 'editor'],
+        'uses' => 'UserController@findall'
+    ]);
 
-    $router->get('/users/{id}', 'UserController@findone');
+    $router->get('/users/{id}', [
+        'roles' => ['admin', 'employee', 'editor'],
+        'uses' => 'UserController@findone'
+    ]);
     
-    $router->put('/changestatus/{id}', 'UserController@changestatus');
+    $router->put('/changestatus/{id}', [
+        'roles' => ['admin'],
+        'uses' => 'UserController@changestatus'
+    ]);
     
-    $router->get('/logout', 'UserController@logoutuser');
+    $router->get('/logout', [
+        'roles' => ['admin', 'employee', 'editor'],
+        'uses' => 'UserController@logoutuser'
+    ]);
     
 });
 

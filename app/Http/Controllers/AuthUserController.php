@@ -35,40 +35,20 @@ public function index() {
             { return response()->json(['error' => 'Wrong email or password!'], 401); }
             
             if (Hash::check($request->password, $user->password)) {
-
-                $role = $user->roles()->get();
+                $roles = $user->roles()->with(['permissions'])->get();
                 
-               $permission_array = [];
-             
-               $customclaimsarray=[];
-              
-                
-                foreach ($role as $rolename){
-                    
-                                      
-                     $role_permission = Roles::with('permissions')->where('name', $rolename->name)->get();
+                $customclaimsarray=[];
 
-                     foreach ($role_permission as $permission_name){
-                         
-                         foreach($permission_name->permissions as $permission){
-                         
-                            array_push($permission_array, $permission->name);
-                         
-                         }
-                     
-                   
-                        array_push($customclaimsarray, [$rolename->name=>$permission_array]);
-                        $permission_array = [];
-                     
-
-                    }
+                foreach ($roles as $role){
+                    $customclaimsarray[$role->name] = $role->permissions->pluck('name')->toArray();               
                 }
+                            
+               $token = JWTAuth::fromUser($user, ['roles' => $customclaimsarray]);
                 
-              
-                             
-               $token = JWTAuth::fromUser($user, $customclaimsarray);
+            } else { 
+                return response()->json(['error' => 'Wrong email or password!'], 401); 
                 
-            } else { return response()->json(['error' => 'Wrong email or password!'], 401); }
+            }
                 
             return response()->json(compact('token'));}
     
