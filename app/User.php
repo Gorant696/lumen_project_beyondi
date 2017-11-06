@@ -42,7 +42,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     
     public function roles(){
         
-        return $this->belongstomany(Roles::class, 'users_roles', 'users_id', 'roles_id');
+        return $this->belongstomany(Roles::class, 'user_roles', 'user_id', 'role_id');
         
     }
     

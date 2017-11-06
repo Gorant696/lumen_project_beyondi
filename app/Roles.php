@@ -8,13 +8,13 @@ class Roles extends Model {
     
      public function users(){
         
-       return $this->belongstomany(User::class, 'users_roles', 'roles_id', 'users_id');
+       return $this->belongstomany(User::class, 'user_roles', 'role_id', 'user_id');
         
     }
 
      public function permissions(){
          
-       return $this->belongstomany(Permissions::class, 'roles_permissions', 'roles_id', 'permissions_id');
+       return $this->belongstomany(Permissions::class, 'role_permissions', 'role_id', 'permission_id');
          
      }
     
