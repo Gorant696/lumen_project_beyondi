@@ -12,7 +12,7 @@ class PermissionsTableSeeder extends Seeder {
      */
     public function run(Permissions $permissions) {
         
-        $permissionlist = ['create', 'delete', 'changestatus', 'update', 'read'];
+        $permissionlist = ['create', 'delete', 'addrole', 'removerole', 'update', 'read'];
 
         foreach ($permissionlist as $permission) {
 

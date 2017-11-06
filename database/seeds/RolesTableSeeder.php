@@ -17,11 +17,11 @@ class RolesTableSeeder extends Seeder {
             'admin' => 
             [
                 'name' => 'Admin', 
-                'permissions' => ['create', 'delete', 'changestatus', 'update', 'read']
+                'permissions' => ['create', 'delete', 'addrole', 'removerole', 'update', 'read']
            ], 
             'moderator' => [
                 'name' => 'My Moderator', 
-                'permissions' => ['create', 'edit']
+                'permissions' => ['create', 'update']
            ], 
             'employee' => [
                 'name' => 'Employee', 

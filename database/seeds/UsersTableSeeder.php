@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\Roles;
 
 
 class UsersTableSeeder extends Seeder
@@ -11,14 +12,17 @@ class UsersTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run(User $user)
+    public function run(User $user, Roles $roles)
     {
        
-           $user->create([
+           $admin=$user->create([
             'name' => 'goran',
             'email' => 'goran@gmail.com',
             'password' => app('hash')->make('password'),
         ]);
+           
+          $roleid=$roles->where('role_key', 'admin')->first();
+          $admin->roles()->attach($roleid->id);
      
         
     

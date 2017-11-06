@@ -42,9 +42,14 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         'uses' => 'UserController@findone'
     ]);
     
-    $router->put('/changestatus/{id}', [
+    $router->put('/addrole/{id}', [
         'roles' => ['admin'],
-        'uses' => 'UserController@changestatus'
+        'uses' => 'UserController@addrole'
+    ]);
+    
+      $router->put('/removerole/{id}', [
+        'roles' => ['admin'],
+        'uses' => 'UserController@removerole'
     ]);
     
     $router->get('/logout', [

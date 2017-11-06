@@ -29,7 +29,8 @@ class UserController extends Controller {
                 $this->validate($request, [
                     'name' => 'required',
                     'email' => 'required|email|unique:users',
-                    'password' => 'required'
+                    'password' => 'required',
+                    'role'=>'required'
                 ]);
             
             try {
@@ -40,15 +41,14 @@ class UserController extends Controller {
                 $user->password = app('hash')->make($pass);
                 $user->save();
 
-                $roles=Roles::where('role_key', 'employee')->first();
-                $id = $roles->id;
-                $user->roles()->attach($id); 
+                $roles=Roles::where('role_key', $request->input('role'))->first();
+                $user->roles()->attach($roles->id); 
 
                 return response()->json(['message' => "Wellcome $user->name!"]);
             
             } catch (\Exception $e) {
 
-            return response()->json(['message' => 'You need to provide name, email and password!']);
+            return response()->json(['message' => 'You need to provide name, email, password and role!']);
         }
     }
     
@@ -102,8 +102,12 @@ class UserController extends Controller {
                 }
             }
     
-            public function changestatus($id, Request $request) {
+            public function addrole($id, Request $request, Roles $roles) {
 
+                 $this->validate($request, [
+                    'role' => 'required'
+                ]);
+                
                 try{
                     $user= User::find($id);
 
@@ -111,25 +115,47 @@ class UserController extends Controller {
                         return response()->json(['message'=> 'User with this ID does not exist!']);
                     }
 
-                    $role =$user->roles()->first();
-                    $rolename = $role->role_key;
+                    $roleid=$roles->where('role_key', $request->input('role'))->first();
+                    
+                    $user->roles()->attach($roleid->id);
 
-                    $user_role=Roles::where('role_key', $rolename)->first();
-                    $id=$user_role->id;
-
-                    $user_not_role=Roles::whereNotin('role_key', [$rolename])->first();
-                    $not_id=$user_not_role->id;
-
-                    $user->roles()->detach($id);
-                    $user->roles()->attach($not_id);
 
                 } catch (\Exception $e) {
 
                     return response()->json(['message' => $e->getMessage()]);
                 }
 
-                    return response()->json(['message'=>"User is not anymore $rolename"]);
+                    return response()->json(['message'=>"Role added successfully"]);
             }
+            
+            
+            public function removerole($id, Request $request, Roles $roles) {
+
+                 $this->validate($request, [
+                    'role' => 'required'
+                ]);
+                
+                try{
+                    $user= User::find($id);
+
+                    if (!$user) {
+                        return response()->json(['message'=> 'User with this ID does not exist!']);
+                    }
+
+                    $roleid=$roles->where('role_key', $request->input('role'))->first();
+                    
+                    $user->roles()->detach($roleid->id);
+
+                
+
+                } catch (\Exception $e) {
+
+                    return response()->json(['message' => $e->getMessage()]);
+                }
+
+                    return response()->json(['message'=>"Role removed successfully"]);
+            }
+            
             
 
             public function findall(Request $request) {
@@ -141,6 +167,7 @@ class UserController extends Controller {
             }
 
     
+            
             public function findone($id) {
 
                         $user=User::find($id);
@@ -151,6 +178,7 @@ class UserController extends Controller {
                         return response()->json(['user' => $user]);
                 }
         
+                
             public function findme() {
 
                try {
