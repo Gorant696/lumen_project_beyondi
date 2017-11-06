@@ -31,8 +31,9 @@ public function index() {
         
             $user = User::where('email', $request->input('email'))->first();
             
-            if ($user == null)              
-            { return response()->json(['error' => 'Wrong email or password!'], 401); }
+            if (!$user)  { 
+                return response()->json(['error' => 'Wrong email or password!'], 401);
+                }
             
             if (Hash::check($request->password, $user->password)) {
                 $roles = $user->roles()->with(['permissions'])->get();
@@ -40,7 +41,7 @@ public function index() {
                 $customclaimsarray=[];
 
                 foreach ($roles as $role){
-                    $customclaimsarray[$role->key] = $role->permissions->pluck('key')->toArray();               
+                    $customclaimsarray[$role->role_key] = $role->permissions->pluck('permission_key')->toArray();               
                 }
                             
                $token = JWTAuth::fromUser($user, ['roles' => $customclaimsarray]);

@@ -14,34 +14,13 @@ class UsersTableSeeder extends Seeder
     public function run(User $user)
     {
        
-           $user->insert([
+           $user->create([
             'name' => 'goran',
             'email' => 'goran@gmail.com',
             'password' => app('hash')->make('password'),
         ]);
      
         
-       /* $users_to_seed = [
-            [
-                'name' => str_random(10),
-                'email' => str_random(10).'@gmail.com',
-                'password' => app('hash')->make('secret'),
-            ],
-
-            [
-                'name' => str_random(10),
-                'email' => str_random(10).'@gmail.com',
-                'password' => app('hash')->make('secret'),
-            ],
-             [
-                'name' => str_random(10),
-                'email' => str_random(10).'@gmail.com',
-                'password' => app('hash')->make('secret'),
-            ]
-        ];
-
-        foreach ($users_to_seed as $seeded) {
-            $user->create($seeded);
-        }*/
+    
     }
 }

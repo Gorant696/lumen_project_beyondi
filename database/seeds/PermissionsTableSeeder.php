@@ -18,7 +18,7 @@ class PermissionsTableSeeder extends Seeder {
 
             $permissions->insert([
                 'name' => $permission,
-                'key' => $permission, 
+                'permission_key' => $permission, 
             ]);
         }
     }
