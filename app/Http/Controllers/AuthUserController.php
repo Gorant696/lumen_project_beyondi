@@ -40,7 +40,7 @@ public function index() {
                 $customclaimsarray=[];
 
                 foreach ($roles as $role){
-                    $customclaimsarray[$role->name] = $role->permissions->pluck('name')->toArray();               
+                    $customclaimsarray[$role->key] = $role->permissions->pluck('key')->toArray();               
                 }
                             
                $token = JWTAuth::fromUser($user, ['roles' => $customclaimsarray]);

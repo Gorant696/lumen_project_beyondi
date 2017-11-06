@@ -16,7 +16,8 @@ class CreatePermissionsTable extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            //@TODO permission_key "Edit user" => "edit_user"
+            $table->string('key');
+            
         });
     }
 

@@ -40,7 +40,7 @@ class UserController extends Controller {
                 $user->password = app('hash')->make($pass);
                 $user->save();
 
-                $roles=Roles::where('name', 'employee')->first();
+                $roles=Roles::where('key', 'employee')->first();
                 $id = $roles->id;
                 $user->roles()->attach($id); 
 
@@ -112,12 +112,12 @@ class UserController extends Controller {
                     }
 
                     $role =$user->roles()->first();
-                    $rolename = $role->name;
+                    $rolename = $role->key;
 
-                    $user_role=Roles::where('name', $rolename)->first();
+                    $user_role=Roles::where('key', $rolename)->first();
                     $id=$user_role->id;
 
-                    $user_not_role=Roles::whereNotin('name', [$rolename])->first();
+                    $user_not_role=Roles::whereNotin('key', [$rolename])->first();
                     $not_id=$user_not_role->id;
 
                     $user->roles()->detach($id);
