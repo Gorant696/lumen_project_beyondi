@@ -33,12 +33,12 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     ]);
     
      $router->get('/users', [
-        'roles' => ['admin', 'employee', 'editor'],
+        'roles' => ['admin', 'employee', 'moderator'],
         'uses' => 'UserController@findall'
     ]);
 
     $router->get('/users/{id}', [
-        'roles' => ['admin', 'employee', 'editor'],
+        'roles' => ['admin', 'employee', 'moderator'],
         'uses' => 'UserController@findone'
     ]);
     
@@ -53,7 +53,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     ]);
     
     $router->get('/logout', [
-        'roles' => ['admin', 'employee', 'editor'],
+        'roles' => ['admin', 'employee', 'moderator'],
         'uses' => 'UserController@logoutuser'
     ]);
     
