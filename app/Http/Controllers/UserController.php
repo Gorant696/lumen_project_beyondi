@@ -40,7 +40,7 @@ class UserController extends Controller {
                 $user->password = app('hash')->make($pass);
                 $user->save();
 
-                $roles=Roles::where('role_name', 'employee')->first();
+                $roles=Roles::where('name', 'employee')->first();
                 $id = $roles->id;
                 $user->roles()->attach($id); 
 
@@ -71,6 +71,12 @@ class UserController extends Controller {
     
     
             public function update($id, Request $request) {
+                
+                 $this->validate($request, [
+                    'name' => 'required',
+                    'email' => 'required|email|unique:users',
+                    'password' => 'required'
+                ]);
 
                 try {
                     $user = User::find($id);
@@ -78,7 +84,15 @@ class UserController extends Controller {
                     if ($user == null)
                     {return response()->json(['message'=> 'User with this ID does not exist!']);}
 
-                    $user->update($request->all());
+                  
+                    $pass = $request->input('password');
+
+                    $user->name = $request->input('name');
+                    $user->email = $request->input('email');
+                    $user->password = app('hash')->make($pass);
+                    $user->save();
+
+                //  $user->update($request->all());
 
                     return response()->json(['message' => 'Updated successfully!']);
 
@@ -94,16 +108,16 @@ class UserController extends Controller {
                     $user= User::find($id);
 
                     if (!$user) {
-                        return response()->json(['Message'=> 'User with this ID does not exist!']);
+                        return response()->json(['message'=> 'User with this ID does not exist!']);
                     }
 
                     $role =$user->roles()->first();
-                    $rolename = $role->role_name;
+                    $rolename = $role->name;
 
-                    $user_role=Roles::where('role_name', $rolename)->first();
+                    $user_role=Roles::where('name', $rolename)->first();
                     $id=$user_role->id;
 
-                    $user_not_role=Roles::whereNotin('role_name', [$rolename])->first();
+                    $user_not_role=Roles::whereNotin('name', [$rolename])->first();
                     $not_id=$user_not_role->id;
 
                     $user->roles()->detach($id);
@@ -114,7 +128,7 @@ class UserController extends Controller {
                     return response()->json(['message' => $e->getMessage()]);
                 }
 
-                    return response()->json(['Message'=>"User is not anymore $rolename"]);
+                    return response()->json(['message'=>"User is not anymore $rolename"]);
             }
             
 
@@ -132,7 +146,7 @@ class UserController extends Controller {
                         $user=User::find($id);
 
                         if ($user == null)
-                        { return response()->json(['Message' =>'User with this id does not exist']);}
+                        { return response()->json(['message' =>'User with this id does not exist']);}
 
                         return response()->json(['user' => $user]);
                 }
@@ -161,7 +175,7 @@ class UserController extends Controller {
                    
                    $roles_permissions = json_decode($payload);
 
-                   return response()->json(['You are signed as' => $user, 'Roles and Permissions'=>$roles_permissions]);
+                   return response()->json(['signed as' => $user, 'Roles and Permissions'=>$roles_permissions]);
            }
         
         
@@ -171,7 +185,7 @@ class UserController extends Controller {
 
                     { JWTAuth::invalidate($token);
 
-                     return response()->json(['Message'=>'You have successfully signed out!']);}
+                     return response()->json(['message'=>'You have successfully signed out!']);}
 
         }
         

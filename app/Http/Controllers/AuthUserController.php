@@ -18,7 +18,7 @@ class AuthUserController extends Controller {
 
 public function index() {
         
-            return response()->json(['Wellcome message'=> "Hello! This API is created in laravel/lumen framework!"]);
+            return response()->json(['message'=> "Hello! This API is created in laravel/lumen framework!"]);
         
     }
        
@@ -46,18 +46,18 @@ public function index() {
                 foreach ($role as $rolename){
                     
                                       
-                     $role_permission = Roles::with('permissions')->where('role_name', $rolename->role_name)->get();
+                     $role_permission = Roles::with('permissions')->where('name', $rolename->name)->get();
 
                      foreach ($role_permission as $permission_name){
                          
                          foreach($permission_name->permissions as $permission){
                          
-                            array_push($permission_array, $permission->permission_name);
+                            array_push($permission_array, $permission->name);
                          
                          }
                      
                    
-                        array_push($customclaimsarray, [$rolename->role_name=>$permission_array]);
+                        array_push($customclaimsarray, [$rolename->name=>$permission_array]);
                         $permission_array = [];
                      
 

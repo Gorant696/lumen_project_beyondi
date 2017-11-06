@@ -69,7 +69,7 @@ class AuthRoleMiddleware {
              }
                } catch(\Exception $e){
                    
-                   return response()->json(['Message' => 'You are not allowed to access this method!']); 
+                   return response()->json(['message' => 'You are not allowed to access this method!']); 
                    
                }
 
