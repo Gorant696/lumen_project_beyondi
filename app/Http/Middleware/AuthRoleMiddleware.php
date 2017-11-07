@@ -17,13 +17,13 @@ class AuthRoleMiddleware {
     public function handle($request, Closure $next) {
 
 
-        $route = $request->route();
-        $actions = $route[1];
+            $route = $request->route();
+            $actions = $route[1];
 
-        $token = JWTAuth::gettoken();
-        $payload = JWTAuth::decode($token);
-        $role_permissions = json_decode($payload);
-        $nextRoute = false;
+            $token = JWTAuth::gettoken();
+            $payload = JWTAuth::decode($token);
+            $role_permissions = json_decode($payload);
+            $nextRoute = false;
        
         foreach ($role_permissions->roles as $userRole => $userPermissions) {
             

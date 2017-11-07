@@ -12,13 +12,13 @@ class PermissionsTableSeeder extends Seeder {
      */
     public function run(Permissions $permissions) {
         
-        $permissionlist = ['create', 'delete', 'addrole', 'removerole', 'update', 'read'];
+        $permissionlist = ['Create', 'Delete', 'Addrole', 'Removerole', 'Update', 'Read'];
 
         foreach ($permissionlist as $permission) {
 
             $permissions->insert([
                 'name' => $permission,
-                'permission_key' => $permission, 
+                'permission_key' => strtolower($permission), 
             ]);
         }
     }

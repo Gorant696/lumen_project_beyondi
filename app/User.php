@@ -20,7 +20,8 @@ use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
-
+    const ROLE_ADMIN = 'admin';
+    
     /**
      * The attributes that are mass assignable.
      *

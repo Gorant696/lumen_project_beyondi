@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
             'password' => app('hash')->make('password'),
         ]);
            
-          $roleid=$roles->where('role_key', 'admin')->first();
+          $roleid=$roles->where('role_key', User::ROLE_ADMIN)->first();
           $admin->roles()->attach($roleid->id);
      
         
