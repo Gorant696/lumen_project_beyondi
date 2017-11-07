@@ -62,7 +62,14 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/', 'AuthUserController@index');
 
     $router->post('/login', 'AuthUserController@authenticate');
+    
+    
+    
+    //aplikacija/views
 
+    $router->get('/welcome', 'Frontend\ViewController@welcome');
+    
+    $router->post('/loginuser', 'Frontend\AuthController@loginuser');
    
     
    
