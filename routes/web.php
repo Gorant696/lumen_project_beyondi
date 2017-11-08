@@ -72,5 +72,9 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     
     $router->get('/someone/{id}', 'Frontend\AuthController@findone');
     
+    $router->get('/all', 'Frontend\AuthController@findall');
+    
+    $router->get('/logoutuser', 'Frontend\AuthController@logoutuser');
+    
    
     

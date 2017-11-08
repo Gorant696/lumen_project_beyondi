@@ -97,5 +97,57 @@ class AuthController extends Controller {
         //retur view (compact decoded), ne zaboraviti makniti dd iznad ovog teksta
         
     }
+    
+     public function findall() {
+         
+             $file = storage_path("tokens/token.txt");
+        $content = file_get_contents($file);
+
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://beyondi.loc/users",
+            CURLOPT_RETURNTRANSFER => 1,
+        ));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer $content",
+        ));
+
+        $decoded = json_decode(curl_exec($curl));
+
+        curl_close($curl);
+
+        dd($decoded);
+
+        //retur view (compact decoded), ne zaboraviti makniti dd iznad ovog teksta
+         
+     }
+     
+      public function logoutuser() {
+         
+             $file = storage_path("tokens/token.txt");
+        $content = file_get_contents($file);
+
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://beyondi.loc/logout",
+            CURLOPT_RETURNTRANSFER => 1,
+        ));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer $content",
+        ));
+
+        $decoded = json_decode(curl_exec($curl));
+
+        curl_close($curl);
+
+        dd($decoded);
+
+        //retur view (compact decoded), ne zaboraviti makniti dd iznad ovog teksta
+         
+     }
 
 }
