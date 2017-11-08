@@ -62,10 +62,15 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     $router->get('/welcome', 'Frontend\ViewController@welcome');
     
+    
+    
     //frontend/logika
     
     $router->post('/loginuser', 'Frontend\AuthController@loginuser');
    
+    $router->get('/me', 'Frontend\AuthController@findme');
+    
+    $router->get('/someone/{id}', 'Frontend\AuthController@findone');
     
    
     

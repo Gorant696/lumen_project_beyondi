@@ -24,9 +24,9 @@ public function index() {
        
      public function authenticate(Request $request) {
 
-            $this->validate($request, [
-                'email' => 'required',
-                'password' => 'required'
+          $this->validate($request, [
+             'email' => 'required',
+               'password' => 'required'
             ]);
         
             $user = User::where('email', $request->input('email'))->first();
@@ -44,13 +44,15 @@ public function index() {
                     $customclaimsarray[$role->role_key] = $role->permissions->pluck('permission_key')->toArray();               
                 }
                                         
-               $token = JWTAuth::fromUser($user, ['roles' => $customclaimsarray]);
+              $token = JWTAuth::fromUser($user, ['roles' => $customclaimsarray]);
+               
+              $id = $user->id;
                 
             } else { 
                 return response()->json(['error' => 'Wrong email or password!'], 401); 
                 
             }
                 
-            return response()->json(compact('token'));}
+            return response()->json(['token'=>$token, 'id'=>$id]);}
     
 }

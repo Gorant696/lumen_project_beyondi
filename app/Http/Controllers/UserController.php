@@ -195,8 +195,9 @@ class UserController extends Controller {
         $payload = JWTAuth::decode($token);
 
         $roles_permissions = json_decode($payload);
+        
 
-        return response()->json(['signed as' => $user, 'Roles and Permissions' => $roles_permissions]);
+        return response()->json(['signed_as' => $user, 'roles_and_permissions' => $roles_permissions]);
     }
 
     public function logoutuser() {

@@ -1,10 +1,10 @@
 <?php
 
-
 namespace App\Http\Controllers\Frontend;
 
-
+use Illuminate\Http\Request;
 use App\User;
+use JWTAuth;
 use App\Http\Controllers\Controller;
 
 class AuthController extends Controller {
@@ -15,28 +15,87 @@ class AuthController extends Controller {
      * @return void
      */
     public function __construct() {
-
-     
+        
     }
 
-    public function loginUser(){
-        
-        //return "dobar dan";
-       $curl = curl_init('http://beyondi.loc/welcome');
-//curl_setopt_array($curl, array(
-  //  CURLOPT_RETURNTRANSFER => 1,
-    //CURLOPT_URL => 'http://localhost:80'
-//));
-// Send the request & save response to $resp
-$resp = curl_exec($curl);
-//$result=json_decode($resp);
-// Close request to clear up some resources
-curl_close($curl);
+    public function loginUser(Request $request) {
 
-//return $resp;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://beyondi.loc/login',
+            CURLOPT_POST => 1,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POSTFIELDS => array(
+                'email' => $request->input('email'),
+                'password' => $request->input('password')
+            ),
+        ));
+
+        $decoded = json_decode(curl_exec($curl));
+        curl_close($curl);
+
+        if (isset($decoded->error)) {
+            echo $decoded->error;
+        } else {
+            $file = storage_path("tokens/token.txt");
+            file_put_contents($file, $decoded->token);
+        }
+
+        //neki return s porukom, iskemijat
+    }
+
+    public function findme() {
+
+
+        $file = storage_path("tokens/token.txt");
+        $content = file_get_contents($file);
+
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://beyondi.loc/findme',
+            CURLOPT_RETURNTRANSFER => 1,
+        ));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer $content",
+        ));
+
+        $decoded = json_decode(curl_exec($curl));
+
+        curl_close($curl);
+
+        dd($decoded);
+
+        //retur view (compact decoded), ne zaboraviti makniti dd iznad ovog teksta
     }
     
+    public function findone($id){
+        
+           $file = storage_path("tokens/token.txt");
+        $content = file_get_contents($file);
 
 
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://beyondi.loc/users/$id",
+            CURLOPT_RETURNTRANSFER => 1,
+        ));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer $content",
+        ));
+
+        $decoded = json_decode(curl_exec($curl));
+
+        curl_close($curl);
+
+        dd($decoded);
+
+        //retur view (compact decoded), ne zaboraviti makniti dd iznad ovog teksta
+        
+    }
 
 }
