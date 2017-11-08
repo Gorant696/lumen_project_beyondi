@@ -67,9 +67,11 @@ class AuthController extends Controller {
 
         curl_close($curl);
 
-        dd($decoded);
+       // dd($decoded);
 
         //retur view (compact decoded), ne zaboraviti makniti dd iznad ovog teksta
+        
+        return view('frontend.findme', compact('decoded'));
     }
     
     public function findone($id){

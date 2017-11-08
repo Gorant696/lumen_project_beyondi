@@ -64,6 +64,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     
     
     
+    
+    
     //frontend/logika
     
     $router->post('/loginuser', 'Frontend\AuthController@loginuser');
