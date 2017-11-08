@@ -1,15 +1,8 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
+
+
+//API
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
     $router->get('/findme', [
@@ -65,9 +58,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     
     
     
-    //aplikacija/views
+    //frontend/views
 
     $router->get('/welcome', 'Frontend\ViewController@welcome');
+    
+    //frontend/logika
     
     $router->post('/loginuser', 'Frontend\AuthController@loginuser');
    

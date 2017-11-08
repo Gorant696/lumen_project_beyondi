@@ -22,10 +22,18 @@ class AuthController extends Controller {
     public function loginUser(){
         
         //return "dobar dan";
-        $curl = curl_init('http://localhost:8000/');
-        $result = curl_exec($curl);
-        curl_close($curl);
-        return $result;
+       $curl = curl_init('http://beyondi.loc/welcome');
+//curl_setopt_array($curl, array(
+  //  CURLOPT_RETURNTRANSFER => 1,
+    //CURLOPT_URL => 'http://localhost:80'
+//));
+// Send the request & save response to $resp
+$resp = curl_exec($curl);
+//$result=json_decode($resp);
+// Close request to clear up some resources
+curl_close($curl);
+
+//return $resp;
     }
     
 

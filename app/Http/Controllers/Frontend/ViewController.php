@@ -24,11 +24,7 @@ class ViewController extends Controller {
         
     }
     
-    public function registeruser(){
-        
-        
-        
-    }
+  
 
 
 }
