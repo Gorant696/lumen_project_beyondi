@@ -18,11 +18,18 @@
 
     <body>
         <div class="container-fluid">
-  
-            @foreach ($decoded->signed_as as $decode)
-            {{$decode}}<br>
-            
-            @endforeach
+           
+         <?php 
+         
+        // dd ($decoded['']);
+         if (isset($decoded->signed_as)){
+             
+         echo $decoded->signed_as->name;
+             
+         }
+         
+        // var_dump($decoded);
+          ?>
         </div> <!--containerfluid-->
     </body>
 

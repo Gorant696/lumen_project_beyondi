@@ -62,6 +62,14 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     $router->get('/welcome', 'Frontend\ViewController@welcome');
     
+    $router->get('/register', 'Frontend\ViewController@registration');
+    
+    $router->get('/edituser/{id}', 'Frontend\ViewController@editUser');
+    
+    $router->get('/addrole/{id}', 'Frontend\ViewController@addrole');
+    
+    $router->get('/removerole/{id}', 'Frontend\ViewController@removerole');
+    
     
     
     
@@ -69,6 +77,16 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     //frontend/logika
     
     $router->post('/loginuser', 'Frontend\AuthController@loginuser');
+    
+    $router->post('/registeruser', 'Frontend\AuthController@registeruser');
+    
+    $router->post('/edit/{id}', 'Frontend\AuthController@edit');
+    
+    $router->post('/addroletouser/{id}', 'Frontend\AuthController@addroletouser');
+    
+    $router->post('/removerolefromuser/{id}', 'Frontend\AuthController@removerolefromuser');
+     
+    $router->get('/deleteuser/{id}', 'Frontend\AuthController@deleteuser');
    
     $router->get('/me', 'Frontend\AuthController@findme');
     

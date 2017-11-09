@@ -58,7 +58,7 @@ class UserController extends Controller {
             return response()->json(['message' => "$user->name is deleted"]);
         } catch (\Exception $e) {
 
-            return response()->json(['message' => 'User with this ID does not exist!']);
+            return response()->json(['message' => "Can't delete user!"]);
         }
     }
 
@@ -108,7 +108,7 @@ class UserController extends Controller {
 
             $roleid = $roles->where('role_key', $request->input('role'))->first();
 
-            if ($user->roles()->where('role_key', $roleid->name)->first()) {
+            if ($user->roles()->where('role_key', $roleid->role_key)->first()) {
 
                 return response()->json(['message' => "Role is already attached to user!"]);
             }
@@ -138,7 +138,7 @@ class UserController extends Controller {
 
             $roleid = $roles->where('role_key', $request->input('role'))->first();
 
-            if (!$user->roles()->where('role_key', $roleid->name)->first()) {
+            if (!$user->roles()->where('role_key', $roleid->role_key)->first()) {
 
                 return response()->json(['message' => "User does not have current role!"]);
             }

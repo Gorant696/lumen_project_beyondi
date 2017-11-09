@@ -24,6 +24,38 @@ class ViewController extends Controller {
         
     }
     
+    public function registration(){
+        
+        return view('frontend.registration');
+        
+    }
+    
+    public function editUser($id){
+        
+        $ids=$id;
+        
+        return view('frontend.edituser', compact('ids'));
+        
+    }
+    
+    public function addrole($id){
+        
+        $ids=$id;
+        
+        return view('frontend.addrole', compact('ids'));
+        
+    }
+    
+      public function removerole($id){
+        
+        $ids=$id;
+        
+        return view('frontend.removerole', compact('ids'));
+        
+    }
+    
+
+    
   
 
 
