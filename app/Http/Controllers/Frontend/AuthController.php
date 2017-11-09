@@ -115,8 +115,8 @@ class AuthController extends Curlhelper {
     public function findall() {
 
         $decoded = $this->get_curl('users');
-        dd($decoded);
-
+      // dd($decoded->users);        
+        return view('frontend.findall', compact('decoded'));
         //retur view (compact decoded), ne zaboraviti makniti dd iznad ovog teksta
     }
 

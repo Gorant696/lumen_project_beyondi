@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../css/bootstrap.css" type="text/css">
-        <link rel="stylesheet" href="../css/mycss.css" type="text/css">
+        
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -17,11 +17,11 @@
 
 
     <body>
-        <div class="container-fluid">
+        <div class="container">
             <div class="myform">
             <form method="POST" action="/loginuser">
                 
-                <span class="loginheader"><h1>Login</h1></span>
+                <span style="text-align: center;"><h2>Login</h2></span>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
                     <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">

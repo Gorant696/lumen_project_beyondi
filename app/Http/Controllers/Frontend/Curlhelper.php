@@ -69,6 +69,7 @@ class Curlhelper extends Controller {
        $data= array(
             CURLOPT_URL => "$this->baseurl$url/$id",
             CURLOPT_RETURNTRANSFER => 1,
+           CURLOPT_CUSTOMREQUEST => 'DELETE',
         );
 
       return $this->curlfunc($data);

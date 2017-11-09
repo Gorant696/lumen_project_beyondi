@@ -26,7 +26,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     ]);
     
      $router->get('/users', [
-        'roles' => ['admin', 'employee', 'moderator'],
+        'roles' => ['admin'],
         'uses' => 'UserController@findall'
     ]);
 
