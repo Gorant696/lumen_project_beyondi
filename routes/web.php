@@ -1,7 +1,5 @@
 <?php
 
-
-
 //API
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
@@ -58,7 +56,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     
     
     
-    //frontend/views
+    //Aplikacija/frontend
 
     $router->get('/welcome', 'Frontend\ViewController@welcome');
     
@@ -71,10 +69,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/removerole/{id}', 'Frontend\ViewController@removerole');
     
     
-    
-    
-    
-    //frontend/logika
     
     $router->post('/loginuser', 'Frontend\AuthController@loginuser');
     
