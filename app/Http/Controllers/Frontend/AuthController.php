@@ -7,102 +7,8 @@ use App\User;
 use JWTAuth;
 use App\Http\Controllers\Controller;
 
-class AuthController extends Controller {
+class AuthController extends Curlhelper {
 
-   
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() {
-        
-    }
-    
-    private function get_curl($url){
-        
-        $file = storage_path("tokens/token.txt");
-        $content = file_get_contents($file);
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://beyondi.loc/$url",
-            CURLOPT_RETURNTRANSFER => 1,
-        ));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer $content",
-        ));
-
-        $decoded = json_decode(curl_exec($curl));
-        
-        curl_close($curl);    
-        
-        return $decoded;
-        
-    }
-    
-    private function put_curl($url, $id, $data){
-        
-                
-         $file = storage_path("tokens/token.txt");
-        $content = file_get_contents($file);
-        
-            
-        $curl = curl_init();
-        
-          curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer $content",
-        ));
-          
-          curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
-        
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://beyondi.loc/$url/$id",
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POSTFIELDS => http_build_query($data)
-        ));
-
-        $decoded = json_decode(curl_exec($curl));
-        curl_close($curl);
-        
-        return $decoded;
-        
-        
-    }
-    
-    public function registeruser(Request $request){
-        
-        
-        $file = storage_path("tokens/token.txt");
-        $content = file_get_contents($file);
-        
-            $curl = curl_init();
-            
-             curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer $content",
-        ));
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://beyondi.loc/users',
-            CURLOPT_POST => 1,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POSTFIELDS => array(
-                'email' => $request->input('email'),
-                'password' => $request->input('password'),
-                'name'=>$request->input('name'),
-                'role'=>$request->input('role')
-            ),
-        ));
-
-        $decoded = json_decode(curl_exec($curl));
-        curl_close($curl);
-
-        dd($decoded);
-
-        //neki return s porukom, iskemijat
-        
-    }
 
     public function loginUser(Request $request) {
 
@@ -131,31 +37,30 @@ class AuthController extends Controller {
         //neki return s porukom, iskemijat
     }
     
+    
+    public function registeruser(Request $request){
+        
+        $data = array(
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+                'name'=>$request->input('name'),
+                'role'=>$request->input('role')
+            );
+        
+         $decoded = $this->post_curl('users', $data);
+            dd($decoded);
+        
+         //neki return s porukom, iskemijat
+        
+    }
+
+    
     public function deleteuser($id){
         
-     $file = storage_path("tokens/token.txt");
-        $content = file_get_contents($file);
+          $decoded = $this->delete_curl('users', $id);
+            dd($decoded);
         
-            
-        $curl = curl_init();
-        
-          curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer $content",
-        ));
-          
-          curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-        
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://beyondi.loc/users/$id",
-            CURLOPT_RETURNTRANSFER => 1,
-        ));
-
-        $decoded = json_decode(curl_exec($curl));
-        curl_close($curl);
-        
-        dd($decoded);
-        
-        
+           //neki return s porukom, iskemijat
     }
     
     public function edit($id, Request $request) {
